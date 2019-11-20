@@ -5,6 +5,11 @@ include __DIR__ . '/vendor/autoload.php';
 include __DIR__ . "/Core/Log.php";
 
 
+$dir = scandir(__DIR__);
+if (!in_array("Tests", $dir)) {
+    mkdir(__DIR__ . "/Tests");
+}
+
 $escopo = $_SERVER['argv'][1];
 
 mkdir(__DIR__ . "/Tests/" . $escopo);
