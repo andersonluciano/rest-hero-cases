@@ -1,0 +1,19 @@
+{
+  "name": "dsindev06/rest-hero-cases",
+  "description": "Console Rest Cliente",
+  "authors": [
+    {
+      "name": "Anderson Luciano",
+      "email": "andersonluciano@protonmail.com"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "^6.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Core\\": "Core/",
+      "Helpers\\": "Helpers/"
+    }
+  }
+}

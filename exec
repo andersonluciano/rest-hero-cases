@@ -1,0 +1,3 @@
+#/bin/bash
+
+php exec.php $1 $2
