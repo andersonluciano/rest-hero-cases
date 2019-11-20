@@ -10,6 +10,11 @@ class Log
             $text = print_r($text, 1);
         }
 
+        $dir = scandir(__DIR__ . "/../");
+        if (!in_array("test-log", $dir)) {
+            mkdir(__DIR__ . "/../test-log");
+        }
+
         $file = __DIR__ . "/../test-log/" . date("d_m_y") . ".txt";
         $text = date("d-m-Y H:i:s") . "\t\t" . $text . "\n\n";
         file_put_contents($file, $text, FILE_APPEND);
