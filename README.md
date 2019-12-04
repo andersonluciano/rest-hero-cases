@@ -58,7 +58,7 @@ All case has to be created with a numeric sequence  starting the name of the cas
 
 You can execute only a case of flow
 
-Let's say I only want to execute the 01-oauth-test.php of FooFlow:
+Let's say I only want to execute the 01-oauth-case.php of FooFlow:
 
 ```
 ./exec FooFlow 01
@@ -88,4 +88,15 @@ php exec.php FooFlow
 ```
 
 All 3 cases will be executed in order
+
+## Tips
+
+    - Files started with _ are ignored
+    - There some core classes made to help with response and log, check there!
+    - Helper's folder exists to make classes to help with data generation, despite this we add Faker Lib too
+    - At test-log folder is logger all responses that use Log Class  
+
+## Fake Data
+
+Use github.com/fzaninotto/Faker to generate fake data on cases
 

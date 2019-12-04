@@ -1,18 +1,17 @@
 <?php
-include __DIR__ . '/vendor/autoload.php';
 
-//error_reporting(E_ALL && !E_NOTICE && !E_WARNING);
+include __DIR__ . '/vendor/autoload.php';
 
 use Core\Log;
 use Core\ClientRest;
 use Core\OAuth;
 
-$testeExecutar = [];
-function getTest($testesEscopo, $numTeste)
+$runCase = [];
+function getTest($flow, $caseNumber)
 {
-    foreach ($testesEscopo as $item) {
+    foreach ($flow as $item) {
         $itemExp = explode("-", $item);
-        if ($itemExp[0] == $numTeste) {
+        if ($itemExp[0] == $caseNumber) {
             return $item;
         }
     }
@@ -20,39 +19,44 @@ function getTest($testesEscopo, $numTeste)
     return false;
 }
 
+function executeCase($flow, $case)
+{
+    Log::consolePrint("Running Case " . $case, "blue");
 
-$escopo = $_SERVER['argv'][1];
-if (array_key_exists(2, $_SERVER['argv'])) {
-    $testeExecutar = $_SERVER['argv'][2];
-    $testeExecutar = explode(",", $testeExecutar);
+    include_once __DIR__ . "/Tests/" . $flow . "/" . $case;
 }
-$testesEscopo = scandir(__DIR__ . "/Tests/" . $escopo);
 
-if (count($testeExecutar) > 0) {
-    if ($testeExecutar[0] == "ls") {
-        $dir = scandir(__DIR__ . "/Tests/" . $escopo);
-        Log::consolePrint("\n --------- Testes Disponíveis --------- ");
+
+$flow = $_SERVER['argv'][1];
+if (array_key_exists(2, $_SERVER['argv'])) {
+    $runCase = $_SERVER['argv'][2];
+    $runCase = explode(",", $runCase);
+}
+$flowCases = scandir(__DIR__ . "/Tests/" . $flow);
+
+if (count($runCase) > 0) {
+    if ($runCase[0] == "ls") {
+        $dir = scandir(__DIR__ . "/Tests/" . $flow);
+        Log::consolePrint("\n --------- Available Cases  --------- ", "blue");
         Log::consolePrint(print_r($dir, 1), "white");
         exit;
     }
 
-    foreach ($testeExecutar as $item) {
-        $fileTeste = getTest($testesEscopo, $item);
-        if (empty($fileTeste)) {
-            Log::consolePrint("Teste " . $item . " não encontrado", 'red');
+    foreach ($runCase as $item) {
+        $case = getTest($flowCases, $item);
+        if (empty($case)) {
+            Log::consolePrint("Case " . $item . " not found", 'red');
         }
-        Log::consolePrint("Rodando teste " . $fileTeste);
 
-        include_once __DIR__ . "/Tests/" . $escopo . "/" . $fileTeste;
+        executeCase($flow, $case);
     }
 } else {
-    foreach ($testesEscopo as $test) {
-        if ($test == "." || $test == ".." || $test == "data") {
+    foreach ($flowCases as $case) {
+        if ($case == "." || $case == ".." || $case == "data" || $case[0] == "_") {
             continue;
         }
-        Log::consolePrint("Rodando teste " . $test);
 
-        include_once __DIR__ . "/Tests/" . $escopo . "/" . $test;
+        executeCase($flow, $case);
     }
 }
 

@@ -38,4 +38,17 @@ class ClientRest
 
         return $body;
     }
+
+    public static function printCompleteResponse(ResponseInterface $response)
+    {
+        $contentType = $response->getHeaderLine("Content-Type");
+        Log::consolePrint("Content-Type: " . $contentType, 'white');
+
+        $statusCode = $response->getStatusCode();
+        $color      = $statusCode < 299 ? "yellow" : "red";
+        Log::consolePrint($statusCode, $color);
+
+        $body = ClientRest::getResponse($response);
+        Log::consolePrint($body, $color);
+    }
 }
